@@ -15,7 +15,8 @@ private:
 	ofstream* fout;
 	ofstream flog;
 public:
-	FPGrowth(ofstream *fout, int threshold = 3) {
+	FPGrowth(ofstream *fout, int threshold = 3) 
+	{
 		this->threshold = threshold;
 		flog.open("result.txt", ios::app);
 		flog.setf(ios::fixed);
@@ -26,9 +27,9 @@ public:
 	void createTable(char* item, int frequency) { table->insertTable(item, frequency); }
 	void createFPtree(FPNode* root, HeaderTable* table, list<string> item_array, int frequency);
 	void connectNode(HeaderTable* table, string item, FPNode* node);
-
 	
-	void frequenctPatternSetting() {
+	void frequenctPatternSetting() 
+	{
 		table->ascendingIndexTable();
 		frequenctPatterns = getFrequentPatterns(table, fpTree);
 	}

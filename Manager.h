@@ -11,10 +11,10 @@ private:
 public:
 	Manager(int threshold, int bpOrder)	//constructor
 	{
-		/* You must fill here */
+		cmd = NULL;
+		fpgrowth = new FPGrowth(&flog, threshold);
+		bptree = new BpTree(&flog, bpOrder);
 	}
-
-
 	~Manager()//destructor
 	{
 		/* You must fill here */
@@ -22,7 +22,6 @@ public:
 
 	ifstream fin;
 	ofstream flog;
-	
 
 	void run(const char* command);
 	bool LOAD();

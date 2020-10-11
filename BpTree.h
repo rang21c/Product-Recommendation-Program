@@ -12,12 +12,16 @@ private:
 	int			order;		// m children
 	ofstream* fout;
 public:
-	BpTree(ofstream *fout, int order = 3) {
+	BpTree(ofstream *fout, int order = 3) 
+	{
 		root = NULL;
 		this->order = order;
 		this->fout = fout;
 	}
-	~BpTree();
+	~BpTree()
+	{
+
+	};
 	/* essential */
 	bool		Insert(int key, set<string> set);
 	bool		excessDataNode(BpTreeNode* pDataNode);

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include <set>
 #include <map>
 using namespace std;
@@ -12,7 +12,7 @@ private:
 
 public:
 	FrequentPatternNode() { frequency = 0; }
-	FrequentPatternNode() { SubSetList.clear(); }
+	//FrequentPatternNode() { SubSetList.clear(); }
 	void setFrequency(int frequency) { this->frequency = frequency; }
 	void InsertList(set<string> item) { FrequentPatternList.insert(multimap<int, set<string>>::value_type(item.size(),item)); }
 	int getFrequency() { return frequency; }
