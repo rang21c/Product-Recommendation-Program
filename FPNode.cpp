@@ -8,13 +8,13 @@ FPNode::FPNode()	//constructor
 	frequency = 0;
 }
 
-
 FPNode::~FPNode()//destructor
 {
 
 }
 
-FPNode* FPNode::getChildrenNode(string item) {
+FPNode* FPNode::getChildrenNode(string item) 
+{
 	map<string, FPNode*>::iterator it = children.find(item);
 	if (it == children.end()) return NULL;
 	FPNode* findNode = it->second;

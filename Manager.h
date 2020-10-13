@@ -17,7 +17,9 @@ public:
 	}
 	~Manager()//destructor
 	{
-		/* You must fill here */
+		cmd = NULL;
+		delete fpgrowth;
+		delete bptree;
 	}
 
 	ifstream fin;
@@ -37,6 +39,5 @@ public:
 
 	void printErrorCode(int n);
 	void printSuccessCode();
-
 };
 

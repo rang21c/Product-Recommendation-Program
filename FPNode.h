@@ -7,17 +7,21 @@ using namespace std;
 class FPNode
 {
 private:
-	char* item;
+	char* item;//item name
 	int frequency;
-	FPNode* parent;
+	FPNode* parent;//parent node
 	FPNode* next;
-	map<string, FPNode*> children;
+	map<string, FPNode*> children;//상품명, 하위상품노드
 public:
 	FPNode();
 	~FPNode();
 	void setParent(FPNode* node) { this->parent = node; }
 	void setNext(FPNode* node) { next = node; }
-	void pushchildren(string item, FPNode* node) { children.insert(map<string, FPNode*>::value_type(item, node)); }
+	void setFrequency(int fre) { frequency = fre; }
+	void pushchildren(string item, FPNode* node) 
+	{ 
+		children.insert(map<string, FPNode*>::value_type(item, node)); 
+	}
 	void setItem(char* item) { strcpy(this->item, item); }
 	void updateFrequency(int frequency) { this->frequency += frequency; }
 
