@@ -14,10 +14,7 @@ public:
 	}
 	~HeaderTable();
 	void insertTable(char* item, int frequency);
-	list<pair<int, string>> getindexTable() 
-	{ 
-		return indexTable; 
-	}
+	list<pair<int, string>> getindexTable() { return indexTable; }
 	map<string, FPNode*> getdataTable() { return dataTable; }
 	FPNode* getNode(string item) { return dataTable.find(item)->second; }
 	void descendingIndexTable() { indexTable.sort(greater<pair<int, string>>()); }

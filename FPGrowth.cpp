@@ -7,7 +7,25 @@ FPGrowth::~FPGrowth() {
 
 void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_array, int frequency) 
 {
-
+	FPNode* curNode = root;
+	for (auto i = item_array.begin(); i != item_array.end(); i++)
+	{
+		if (curNode->getChildrenNode((*i)))//item exist
+		{
+			curNode->getChildrenNode((*i))->updateFrequency(1);//frequency++
+			curNode = curNode->getChildrenNode((*i));
+		}
+		else//item no exist
+		{
+			FPNode* newnode = new FPNode;
+			newnode->setItem((char*)(*i).c_str());//set item name
+			newnode->updateFrequency(frequency);//set frequency
+			newnode->setParent(curNode);//set parent
+			curNode->pushchildren((*i), newnode);
+			connectNode(table, (*i), newnode);
+			curNode = newnode;
+		}
+	}
 }
 
 void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node) 
@@ -40,7 +58,7 @@ void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node)
 //}
 
 bool FPGrowth::printList() 
-{//
+{//PRINT_ITEMLIST
 	if (this->table->getindexTable().empty())
 		return false;
 	auto temp = this->table->getindexTable();
@@ -57,7 +75,13 @@ bool FPGrowth::printList()
 }
 
 bool FPGrowth::printTree() 
-{
+{//PRINT_FPTREE
+	if (!this->getTree())
+		return false;
+	*fout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;
+	cout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;
+
+
 	return true;
 }
 

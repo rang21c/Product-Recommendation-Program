@@ -1,5 +1,6 @@
 #include "Manager.h"
 #include <string>
+#include <algorithm>
 
 void Manager::run(const char* command)
 {
@@ -42,6 +43,15 @@ void Manager::run(const char* command)
 			else
 				printErrorCode(300);//PRINT_ITEMLIST fail
 		}
+		else if (strcmp(tmp, "PRINT_FPTREE") == 0)
+		{
+			flog << "====== " << tmp << " ======" << endl;
+			cout << "====== " << tmp << " ======" << endl;
+			if (PRINT_FPTREE())
+				continue;//PRINT_ITEMLIST success
+			else
+				printErrorCode(400);//PRINT_ITEMLIST fail
+		}
 	}
 	fin.close();
 	return;
@@ -49,27 +59,53 @@ void Manager::run(const char* command)
 
 bool Manager::LOAD()
 {
+	FPNode* root = this->fpgrowth->getTree();
 	fstream temp;
 	//market.txt
 	temp.open("testcase1.txt");//read file open
 	if (!temp || !fpgrowth->getHeaderTable()->getdataTable().empty() || fpgrowth->getTree()->getNext())//file open fail || queue is not empty
 		return false;//LOAD fail
 	string cmd;
+	vector<list<string>> item_vector;//vector of item_array
 	while (!temp.eof())
 	{
+		list<string> item_array;//list of items bought together
 		getline(temp, cmd);//read line
 		char* name = strtok((char*)cmd.c_str(), "\t");
 		if (name == NULL)
 			break;
+		item_array.push_back(name);
 		while (1)
 		{
-			fpgrowth->createTable(name, 1);
+			fpgrowth->createTable(name, 1);//make HeaderTable
 			name = strtok(NULL, "\t");
 			if (name == NULL)
 				break;
+			item_array.push_back(name);
 		}
+		item_vector.push_back(item_array);
 	}
 	fpgrowth->getHeaderTable()->descendingIndexTable();
+	for (int i = 0; i < item_vector.size(); i++)
+	{
+		item_vector[i].sort(greater<string>());//item_array descending order
+		for (auto j = item_vector[i].begin(); j != item_vector[i].end(); j++)
+		{
+			for (auto k = item_vector[i].begin(); k != item_vector[i].end(); k++)
+			{
+				if (fpgrowth->item_frequency((*k)) < fpgrowth->item_frequency((*j)))
+				{//item_array selection sort by frequency
+					string temp = (*j);
+					(*j) = (*k);
+					(*k) = temp;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < item_vector.size(); i++)
+	{
+		fpgrowth->createFPtree(root, fpgrowth->getHeaderTable(), item_vector[i], 1);//make FPtree//fpgrowth->item_frequency((*j))
+	}
 	temp.close();
 	return true;//LOAD success
 }
@@ -89,7 +125,9 @@ bool Manager::PRINT_ITEMLIST()
 
 bool Manager::PRINT_FPTREE()
 {
-	return false;
+	if (!fpgrowth->printTree())
+		return false;//fptree empty
+	return true;
 }
 
 //bool Manager::PRINT_ITEMLIST(char* item, int start, int end) 
@@ -119,17 +157,17 @@ bool Manager::PRINT_RANGE(char* item, int start, int end)
 
 void Manager::printErrorCode(int n) 
 {//ERROR CODE PRINT
-	flog << "======== ERROR " << n << " ========" << endl;
-	flog << "=======================" << endl << endl;
-	cout << "======== ERROR " << n << " ========" << endl;
-	cout << "=======================" << endl << endl;
+	flog << "======= ERROR " << n << " =======" << endl;
+	flog << "==========================" << endl << endl;
+	cout << "======= ERROR " << n << " =======" << endl;
+	cout << "==========================" << endl << endl;
 }
 
 void Manager::printSuccessCode() 
 {//SUCCESS CODE PRINT 
 	flog << "Success" << endl;
-	flog << "=======================" << endl << endl;
+	flog << "==========================" << endl << endl;
 	cout << "Success" << endl;
-	cout << "=======================" << endl << endl;
+	cout << "==========================" << endl << endl;
 }
 

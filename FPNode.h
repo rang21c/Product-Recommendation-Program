@@ -17,13 +17,12 @@ public:
 	~FPNode();
 	void setParent(FPNode* node) { this->parent = node; }
 	void setNext(FPNode* node) { next = node; }
-	void setFrequency(int fre) { frequency = fre; }
 	void pushchildren(string item, FPNode* node) 
 	{ 
 		children.insert(map<string, FPNode*>::value_type(item, node)); 
 	}
 	void setItem(char* item) { strcpy(this->item, item); }
-	void updateFrequency(int frequency) { this->frequency += frequency; }
+	void updateFrequency(int frequency) { this->frequency += frequency; }//plus frequency
 
 	char* getItem() { return item; }
 	int getFrequency() { return frequency; }

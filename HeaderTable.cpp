@@ -14,7 +14,7 @@ void HeaderTable::insertTable(char* item, int frequency)
 	newnode->setItem(item);
 	if (indexTable.empty())
 	{//indextable is empty
-		newnode->setFrequency(1);
+		newnode->updateFrequency(1);
 		indexTable.push_back(make_pair(frequency, item));
 		dataTable.insert(pair<string, FPNode*>(item, newnode));
 	}
@@ -22,14 +22,14 @@ void HeaderTable::insertTable(char* item, int frequency)
 	{//indextable is not empty
 		if (find_frequency(item) == 0)
 		{//item no exist
-			newnode->setFrequency(1);
+			newnode->updateFrequency(1);
 			indexTable.push_back(make_pair(frequency, item));
 			dataTable.insert(pair<string, FPNode*>(item, newnode));
 		}
 		else
 		{//item exist
 			//datatable FPNode frequency + 1
-			(*dataTable.find(item)).second->setFrequency((*dataTable.find(item)).second->getFrequency() + 1);
+			(*dataTable.find(item)).second->updateFrequency(1);
 			for (auto it = indexTable.begin(); it != indexTable.end(); it++)
 			{//indextable frequency + 1
 				if ((*it).second == item)
