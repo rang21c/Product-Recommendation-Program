@@ -10,20 +10,23 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 	FPNode* curNode = root;
 	for (auto i = item_array.begin(); i != item_array.end(); i++)
 	{
-		if (curNode->getChildrenNode((*i)))//item exist
+		if (this->item_frequency((*i)) >= this->threshold)//threshold check
 		{
-			curNode->getChildrenNode((*i))->updateFrequency(1);//frequency++
-			curNode = curNode->getChildrenNode((*i));
-		}
-		else//item no exist
-		{
-			FPNode* newnode = new FPNode;
-			newnode->setItem((char*)(*i).c_str());//set item name
-			newnode->updateFrequency(frequency);//set frequency
-			newnode->setParent(curNode);//set parent
-			curNode->pushchildren((*i), newnode);
-			connectNode(table, (*i), newnode);
-			curNode = newnode;
+			if (curNode->getChildrenNode((*i)))//item exist
+			{
+				curNode->getChildrenNode((*i))->updateFrequency(1);//frequency++
+				curNode = curNode->getChildrenNode((*i));
+			}
+			else//item no exist
+			{
+				FPNode* newnode = new FPNode;
+				newnode->setItem((char*)(*i).c_str());//set item name
+				newnode->updateFrequency(frequency);//set frequency
+				newnode->setParent(curNode);//set parent
+				curNode->pushchildren((*i), newnode);
+				connectNode(table, (*i), newnode);
+				curNode = newnode;
+			}
 		}
 	}
 }
