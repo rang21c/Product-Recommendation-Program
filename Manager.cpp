@@ -77,7 +77,7 @@ bool Manager::LOAD()
 		item_array.push_back(name);
 		while (1)
 		{
-			fpgrowth->createTable(name, 1);//make HeaderTable
+			fpgrowth->createTable(name, 1);//Make HeaderTable
 			name = strtok(NULL, "\t");
 			if (name == NULL)
 				break;
@@ -87,8 +87,7 @@ bool Manager::LOAD()
 	}
 	fpgrowth->getHeaderTable()->descendingIndexTable();
 	for (int i = 0; i < item_vector.size(); i++)
-	{
-		item_vector[i].sort(greater<string>());//item_array descending order
+	{//Transaction order
 		for (auto j = item_vector[i].begin(); j != item_vector[i].end(); j++)
 		{
 			for (auto k = item_vector[i].begin(); k != item_vector[i].end(); k++)
@@ -101,9 +100,21 @@ bool Manager::LOAD()
 				}
 			}
 		}
+		for (auto j = item_vector[i].begin(); j != item_vector[i].end(); j++)
+		{
+			for (auto k = item_vector[i].begin(); k != item_vector[i].end(); k++)
+			{
+				if (strcmp((*j).c_str(), (*k).c_str()) > 0 && fpgrowth->item_frequency((*k)) == fpgrowth->item_frequency((*j)))
+				{//item_array selection sort by frequency if same frequency
+					string temp = (*j);
+					(*j) = (*k);
+					(*k) = temp;
+				}
+			}
+		}
 	}
 	for (int i = 0; i < item_vector.size(); i++)
-	{
+	{//Make FPtree
 		fpgrowth->createFPtree(root, fpgrowth->getHeaderTable(), item_vector[i], 1);//make FPtree//fpgrowth->item_frequency((*j))
 	}
 	temp.close();

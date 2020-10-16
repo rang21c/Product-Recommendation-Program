@@ -33,7 +33,21 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 
 void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node) 
 {
-
+	if (table->getNode(item)->getNext() == NULL)//First insert of nextnode
+	{
+		table->getNode(item)->setNext(node);
+	}
+	else//node connect if not First
+	{
+		FPNode* temp = table->getNode(item);
+		while (1)
+		{
+			if (temp->getNext() == NULL)
+				break;
+			temp = temp->getNext();
+		}
+		temp->setNext(node);
+	}
 }
 
 //bool FPGrowth::contains_single_path(FPNode* pNode) 
@@ -80,11 +94,36 @@ bool FPGrowth::printList()
 bool FPGrowth::printTree() 
 {//PRINT_FPTREE
 	if (!this->getTree())
-		return false;
+		return false;//Tree is empty
 	*fout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;
 	cout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;
-
-
+	this->table->ascendingIndexTable();//IndexTable ascending order
+	auto temp = this->table->getindexTable();
+	for (auto it = temp.begin(); it != temp.end(); it++)
+	{
+		if (this->table->getNode((*it).second)->getFrequency() >= this->threshold)
+		{//Print if more than threshold
+			*fout << "{" << (*it).second << "," << (*it).first << "}" << endl;
+			cout << "{" << (*it).second << "," << (*it).first << "}" << endl;
+			FPNode* searchnode = this->table->getNode((*it).second)->getNext();
+			FPNode* searchparent;
+			while (searchnode != NULL)
+			{//Next node search and print
+				searchparent = searchnode;
+				while (searchparent->getParent() != NULL)
+				{//Parent node search and print
+					*fout << "(" << searchparent->getItem() << "," << searchparent->getFrequency() << ")" << " ";
+					cout << "(" << searchparent->getItem() << "," << searchparent->getFrequency() << ")" << " ";
+					searchparent = searchparent->getParent();
+				}
+				*fout << endl;
+				cout << endl;
+				searchnode = searchnode->getNext();
+			}
+		}
+	}
+	*fout << "===============================" << endl << endl;
+	cout << "===============================" << endl << endl;
 	return true;
 }
 
