@@ -62,16 +62,16 @@ void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node)
 //	return {};
 //}
 
-//void FPGrowth::powerSet(map<set<string>, int>* FrequenctPattern, vector<string> data, string item, int frequency, int* ptr, int depth) {
+//void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* ptr, int depth) {
 //	if (data.size() == depth) {
 //		set<string> set; set.insert(item);
 //		for (int i = 0; i < data.size(); i++) { if (ptr[i] == 1) set.insert(data[i]); }
-//		FrequenctPattern->insert(make_pair(set, frequency)); return;
+//		FrequentPattern->insert(make_pair(set, frequency)); return;
 //	}
 //	ptr[depth] = 1;
-//	powerSet(FrequenctPattern, data, item, frequency, ptr, depth + 1);
+//	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
 //	ptr[depth] = 0;
-//	powerSet(FrequenctPattern, data, item, frequency, ptr, depth + 1);
+//	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
 //}
 
 bool FPGrowth::printList() 

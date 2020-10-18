@@ -35,7 +35,7 @@ public:
 	}*/
 
 	//map<set<string>, int> getFrequentPatterns(HeaderTable* pTable, FPNode* pTree);
-	//void powerSet(map<set<string>, int>* FrequenctPattern, vector<string> data, string item, int frequency, int* flag, int depth);
+	//void powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* flag, int depth);
 	//bool contains_single_path(FPNode* pNode);
 	int item_frequency(string item) {return table->find_frequency(item);}
 	FPNode* getTree() { return fpTree; }
