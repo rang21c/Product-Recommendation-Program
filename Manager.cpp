@@ -61,9 +61,8 @@ bool Manager::LOAD()
 {
 	FPNode* root = this->fpgrowth->getTree();
 	fstream temp;
-	//market.txt
-	temp.open("testcase1.txt");//read file open
-	if (!temp || !fpgrowth->getHeaderTable()->getdataTable().empty() || fpgrowth->getTree()->getNext())//file open fail || queue is not empty
+	temp.open("market.txt");//read file open
+	if (!temp || !fpgrowth->getHeaderTable()->getdataTable().empty() || fpgrowth->getTree()->getNext())//file open fail || already inserted
 		return false;//LOAD fail
 	string cmd;
 	vector<list<string>> item_vector;//vector of item_array
@@ -123,7 +122,27 @@ bool Manager::LOAD()
 
 bool Manager::BTLOAD()
 {
-	
+	fstream temp;
+	temp.open("result.txt");//read file open
+	if (!temp || bptree->getRoot())//file open fail || bptree is not empty
+		return false;//BTLOAD fail
+	string cmd;
+	while (!temp.eof())
+	{
+		set<string> fp;
+		getline(temp, cmd);//read line
+		char* frequency = strtok((char*)cmd.c_str(), "\t");
+		if (frequency == NULL)
+			break;
+		while (1)
+		{
+			char* name = strtok(NULL, "\t");
+			if (name == NULL)
+				break;
+			fp.insert(name);
+		}
+		bptree->Insert(atoi(frequency), fp);
+	}
 	return true;
 }
 

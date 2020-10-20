@@ -93,7 +93,7 @@ bool FPGrowth::printList()
 
 bool FPGrowth::printTree() 
 {//PRINT_FPTREE
-	if (!this->getTree())
+	if (this->getTree()->getChildren().empty())
 		return false;//Tree is empty
 	*fout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;
 	cout << "{StandardItem,Frequency} (Path_Item,Frequency)" << endl;

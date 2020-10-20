@@ -10,7 +10,6 @@ private:
 public:
 	BpTreeIndexNode() {}
 
-
 	void insertIndexMap(int n, BpTreeNode* pN) {
 		mapIndex.insert(map<int, BpTreeNode*>::value_type(n, pN));
 	}
