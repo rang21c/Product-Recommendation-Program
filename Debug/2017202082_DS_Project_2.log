@@ -1,4 +1,4 @@
-﻿  Manager.cpp
-  main.cpp
-  코드를 생성하고 있습니다...
-  2017202082_DS_Project_2.vcxproj -> C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\Debug\2017202082_DS_Project_2.exe
+﻿  BpTree.cpp
+C:\Users\rang2\source\repos\DataStructureProject2\BpTree.cpp(72,43): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rang2\source\repos\DataStructureProject2\BpTree.cpp(81,45): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+  2017202082_DS_Project_2.vcxproj -> C:\Users\rang2\source\repos\DataStructureProject2\Debug\2017202082_DS_Project_2.exe
