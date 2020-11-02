@@ -241,13 +241,55 @@ bool BpTree::printFrequency(string item, int min_frequency)
 	}
 	if (check == false)////Frequent Pattern not exist
 		return false;
-	*fout << "================================" << endl;
-	cout << "================================" << endl;
+	*fout << "================================" << endl << endl;
+	cout << "================================" << endl << endl;
 	return true;//print success
 }
 bool BpTree::printRange(string item, int min, int max) 
 {
-
+	bool check = false;
+	BpTreeNode* pCur = root;
+	map<int, FrequentPatternNode*>::iterator it;
+	while (pCur->getMostLeftChild() != NULL)//find mostleft data node
+		pCur = pCur->getMostLeftChild();//pCur is datanode begin()
+	while (pCur != NULL)
+	{
+		map<int, FrequentPatternNode*>* cur = pCur->getDataMap();//get datanode
+		it = cur->begin();//begin iterator
+		while (it != cur->end())
+		{
+			if (min <= it->first && it->first <= max)//find higher than min and lower than max
+			{
+				multimap<int, set<string>>::iterator ia;//setting iterator
+				multimap<int, set<string>> temp = it->second->getList();//get multimap
+				ia = temp.begin();
+				while (ia != temp.end())
+				{
+					if (ia->second.find(item) != ia->second.end())//if item exist
+					{
+						if (check == false)
+						{
+							*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
+							cout << "StandardItem" << "    " << "FrequentPatternFrequency" << "    " << "Frequency" << endl;
+						}
+						*fout << item << " -> ";
+						cout << item << " -> ";
+						printFrequentPatterns(ia->second, item);//print frequentpatterns
+						*fout << " " << it->first << endl;
+						cout << " " << it->first << endl;
+						check = true;//Frequent Pattern exist
+					}
+					ia++;
+				}
+			}
+			it++;
+		}
+		pCur = pCur->getNext();// move next datanode
+	}
+	if (check == false)////Frequent Pattern not exist
+		return false;
+	*fout << "================================" << endl << endl;
+	cout << "================================" << endl << endl;
 	return true;
 }
 void BpTree::printFrequentPatterns(set<string> pFrequentPattern, string item)

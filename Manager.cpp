@@ -65,6 +65,19 @@ void Manager::run(const char* command)
 			else
 				printErrorCode(500);//PRINT_ITEMLIST fail
 		}
+		else if (strcmp(tmp, "PRINT_RANGE") == 0)
+		{
+			char* item = strtok(NULL, " ");//word cutting
+			char* min_frequency = strtok(NULL, " ");//word cutting
+			char* max_frequency = strtok(NULL, " ");//word cutting
+			char* check = strtok(NULL, " ");
+			flog << "====== " << tmp << " ======" << endl;
+			cout << "====== " << tmp << " ======" << endl;
+			if (PRINT_RANGE(item, atoi(min_frequency), atoi(max_frequency)) && check == NULL)
+				continue;//PRINT_ITEMLIST success
+			else
+				printErrorCode(700);//PRINT_ITEMLIST fail
+		}
 		else if (strcmp(tmp, "EXIT") == 0)
 		{
 			flog << "====== " << tmp << " ======" << endl;
@@ -195,7 +208,8 @@ bool Manager::PRINT_CONFIDENCE(char* item, double rate)
 
 bool Manager::PRINT_RANGE(char* item, int start, int end) 
 {
-
+	if (!bptree->printRange(item, start, end) || bptree->getRoot() == NULL)
+		return false;
 	return true;
 }
 
