@@ -16,6 +16,7 @@ void Manager::run(const char* command)
 	{
 		fin.getline(cmd, 100);//read line
 		char* tmp = strtok(cmd, " ");//word cutting
+		if (tmp == NULL) break;
 		if (strcmp(tmp, "LOAD") == 0)
 		{
 			flog << "========== " << tmp << " ==========" << endl;
@@ -51,6 +52,25 @@ void Manager::run(const char* command)
 				continue;//PRINT_ITEMLIST success
 			else
 				printErrorCode(400);//PRINT_ITEMLIST fail
+		}
+		else if (strcmp(tmp, "PRINT_MIN") == 0)
+		{
+			char* item = strtok(NULL, " ");//word cutting
+			char* min_frequency = strtok(NULL, " ");//word cutting
+			char* check = strtok(NULL, " ");
+			flog << "====== " << tmp << " ======" << endl;
+			cout << "====== " << tmp << " ======" << endl;
+			if (PRINT_MIN(item, atoi(min_frequency)) && check == NULL)
+				continue;//PRINT_ITEMLIST success
+			else
+				printErrorCode(500);//PRINT_ITEMLIST fail
+		}
+		else if (strcmp(tmp, "EXIT") == 0)
+		{
+			flog << "====== " << tmp << " ======" << endl;
+			cout << "====== " << tmp << " ======" << endl;
+			printSuccessCode();
+			return;
 		}
 	}
 	fin.close();
@@ -160,28 +180,22 @@ bool Manager::PRINT_FPTREE()
 	return true;
 }
 
-//bool Manager::PRINT_ITEMLIST(char* item, int start, int end) 
-//{
-//	
-//}
-//
-//bool Manager::PRINT_FPTREE(char* item, int start, int end) 
-//{
-//	
-//}
-
 bool Manager::PRINT_MIN(char* item, int min_frequency) 
 {
+	if (!bptree->printFrequency(item, min_frequency) || bptree->getRoot() == NULL)
+		return false;
 	return true;
 }
 
 bool Manager::PRINT_CONFIDENCE(char* item, double rate) 
 {
+
 	return true;
 }
 
 bool Manager::PRINT_RANGE(char* item, int start, int end) 
 {
+
 	return true;
 }
 
