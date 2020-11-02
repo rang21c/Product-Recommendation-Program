@@ -1,8 +1,10 @@
 #include "FPGrowth.h"
 
 
-FPGrowth::~FPGrowth() {
-
+FPGrowth::~FPGrowth() 
+{
+	delete fpTree;
+	delete table;
 }
 
 void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_array, int frequency) 

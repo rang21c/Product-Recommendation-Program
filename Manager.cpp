@@ -19,39 +19,51 @@ void Manager::run(const char* command)
 		if (tmp == NULL) break;
 		if (strcmp(tmp, "LOAD") == 0)
 		{
+			char* check = strtok(NULL, " ");
 			flog << "========== " << tmp << " ==========" << endl;
 			cout << "========== " << tmp << " ==========" << endl;
-			if (LOAD())
+			if (check != NULL)
+				printErrorCode(100);
+			else if (LOAD())
 				printSuccessCode();//LOAD success
 			else
 				printErrorCode(100);//LOAD fail
 		}
 		else if (strcmp(tmp, "BTLOAD") == 0)
 		{
+			char* check = strtok(NULL, " ");
 			flog << "========== " << tmp << " ==========" << endl;
 			cout << "========== " << tmp << " ==========" << endl;
-			if (BTLOAD())
+			if (check != NULL)
+				printErrorCode(200);
+			else if (BTLOAD())
 				printSuccessCode();//BTLOAD success
 			else
 				printErrorCode(200);//BTLOAD fail
 		}
 		else if (strcmp(tmp, "PRINT_ITEMLIST") == 0)
 		{
+			char* check = strtok(NULL, " ");
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (PRINT_ITEMLIST())
+			if (check != NULL)
+				printErrorCode(300);
+			else if (PRINT_ITEMLIST())
 				continue;//PRINT_ITEMLIST success
 			else
 				printErrorCode(300);//PRINT_ITEMLIST fail
 		}
 		else if (strcmp(tmp, "PRINT_FPTREE") == 0)
 		{
+			char* check = strtok(NULL, " ");
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (PRINT_FPTREE())
-				continue;//PRINT_ITEMLIST success
+			if (check != NULL)
+				printErrorCode(400);
+			else if (PRINT_FPTREE())
+				continue;//PRINT_FPTREE success
 			else
-				printErrorCode(400);//PRINT_ITEMLIST fail
+				printErrorCode(400);//PRINT_FPTREE fail
 		}
 		else if (strcmp(tmp, "PRINT_MIN") == 0)
 		{
@@ -63,9 +75,9 @@ void Manager::run(const char* command)
 			if (check != NULL)
 				printErrorCode(500);
 			else if (PRINT_MIN(item, atoi(min_frequency)))
-				continue;//PRINT_ITEMLIST success
+				continue;//PRINT_MIN success
 			else
-				printErrorCode(500);//PRINT_ITEMLIST fail
+				printErrorCode(500);//PRINT_MIN fail
 		}
 		else if (strcmp(tmp, "PRINT_CONFIDENCE") == 0)
 		{
@@ -77,9 +89,9 @@ void Manager::run(const char* command)
 			if (check != NULL)
 				printErrorCode(600);
 			else if (PRINT_CONFIDENCE(item, atof(confidence)))
-				continue;//PRINT_ITEMLIST success
+				continue;//PRINT_CONFIDENCE success
 			else
-				printErrorCode(600);//PRINT_ITEMLIST fail
+				printErrorCode(600);//PRINT_CONFIDENCE fail
 		}
 		else if (strcmp(tmp, "PRINT_RANGE") == 0)
 		{
@@ -92,9 +104,21 @@ void Manager::run(const char* command)
 			if (check != NULL)
 				printErrorCode(700);
 			else if (PRINT_RANGE(item, atoi(min_frequency), atoi(max_frequency)))
-				continue;//PRINT_ITEMLIST success
+				continue;//PRINT_RANGE success
 			else
-				printErrorCode(700);//PRINT_ITEMLIST fail
+				printErrorCode(700);//PRINT_RANGE fail
+		}
+		else if (strcmp(tmp, "SAVE") == 0)
+		{
+			char* check = strtok(NULL, " ");
+			flog << "========== " << tmp << " ==========" << endl;
+			cout << "========== " << tmp << " ==========" << endl;
+			if (check != NULL)
+				printErrorCode(800);//SAVE fail
+			//else if (SAVE())
+				//printSuccessCode();//SAVE success
+			else
+				printErrorCode(800);//SAVE fail
 		}
 		else if (strcmp(tmp, "EXIT") == 0)
 		{
@@ -190,9 +214,9 @@ bool Manager::BTLOAD()
 			char* name = strtok(NULL, "\t");
 			if (name == NULL)
 				break;
-			fp.insert(name);
+			fp.insert(name);//make set
 		}
-		bptree->Insert(atoi(frequency), fp);
+		bptree->Insert(atoi(frequency), fp);//insert bptree
 	}
 	return true;
 }
@@ -220,7 +244,8 @@ bool Manager::PRINT_MIN(char* item, int min_frequency)
 
 bool Manager::PRINT_CONFIDENCE(char* item, double rate) 
 {
-
+	if (!bptree->printConfidence(item, rate, fpgrowth->item_frequency(item)) || bptree->getRoot() == NULL)
+		return false;
 	return true;
 }
 

@@ -13,7 +13,8 @@ public:
 		pMostLeftChild = NULL;
 	}
 	~BpTreeNode() {
-
+		pParent = NULL;
+		pMostLeftChild = NULL;
 	}
 
 	void setMostLeftChild(BpTreeNode* pN) { pMostLeftChild = pN; }

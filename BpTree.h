@@ -20,7 +20,7 @@ public:
 	}
 	~BpTree()
 	{
-
+		root = NULL;
 	};
 	/* essential */
 	bool		Insert(int key, set<string> set);
@@ -33,7 +33,7 @@ public:
 
 	void	printFrequentPatterns(set<string> pFrequentPattern, string item);
 	bool	printFrequency(string item, int min_frequency);
-	bool	printConfidence(string item, double item_frequency, int min_frequency);
+	bool	printConfidence(string item, double item_frequency, double min_frequency);
 	bool 	printRange(string item, int min, int max);
 
 };

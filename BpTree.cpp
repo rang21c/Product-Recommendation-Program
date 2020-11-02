@@ -1,5 +1,6 @@
 #include "BpTree.h"
 #include <cmath>
+#include <iomanip>
 
 bool BpTree::Insert(int key, set<string> set) 
 {
@@ -35,19 +36,19 @@ BpTreeNode* BpTree::searchDataNode(int n)
 	map<int, BpTreeNode*>::iterator it;
 
 	while (pCur->getMostLeftChild() != NULL)
-	{
+	{//search
 		it = pCur->getIndexMap()->begin();
-		if (n < it->first)
-			pCur = pCur->getMostLeftChild();
+		if (n < it->first)//if searchnode smaller
+			pCur = pCur->getMostLeftChild();//move leftchild
 		else
-		{
+		{//if searchnode bigger 
 			while (1)
 			{
 				it++;
 				if (it == pCur->getIndexMap()->end() || n < it->first)
 				{
 					it--;
-					pCur = it->second;
+					pCur = it->second;//move child
 					break;
 				}
 			}
@@ -68,10 +69,10 @@ void BpTree::splitDataNode(BpTreeNode* pDataNode)
 	for (int i = 1; i < order; i++)
 	{//find split point datanode - center
 		mleft++;
-		if (i == split - 1)
+		if (i == split - 1)//find split node
 		{
-			center = mleft;
-			temp = center;
+			center = mleft;//set centernode index
+			temp = center;//store centernode index
 		}
 	}
 	BpTreeNode* newdatanode = new BpTreeDataNode;//right datanode of a division node
@@ -105,7 +106,7 @@ void BpTree::splitDataNode(BpTreeNode* pDataNode)
 		pDataNode->setParent(indexParentnode);
 		newdatanode->setParent(indexParentnode);
 		indexParentnode->setMostLeftChild(pDataNode);
-		root = indexParentnode;
+		root = indexParentnode;//set root
 	}
 	else
 	{//If not the first insertion of index node
@@ -162,7 +163,7 @@ void BpTree::splitIndexNode(BpTreeNode* pIndexNode)
 		newroot->insertIndexMap(center->first, newindexnode);
 		newroot->setMostLeftChild(pIndexNode);
 		pIndexNode->getIndexMap()->erase(center);
-		root = newroot;
+		root = newroot;//set root
 	}
 	else
 	{//pIndexNode have parent
@@ -193,9 +194,51 @@ bool BpTree::excessIndexNode(BpTreeNode* pIndexNode)
 }
 
 
-bool BpTree::printConfidence(string item, double item_frequency, int min_frequency)//double min_frequency
+bool BpTree::printConfidence(string item, double item_frequency, double min_frequency)//double min_frequency
 {
-
+	bool check = false;
+	BpTreeNode* pCur = root;
+	map<int, FrequentPatternNode*>::iterator it;
+	while (pCur->getMostLeftChild() != NULL)//find mostleft data node
+		pCur = pCur->getMostLeftChild();//pCur is datanode begin()
+	while (pCur != NULL)
+	{
+		map<int, FrequentPatternNode*>* cur = pCur->getDataMap();//get datanode
+		it = cur->begin();//begin iterator
+		while (it != cur->end())
+		{
+			multimap<int, set<string>>::iterator ia;//setting iterator
+			multimap<int, set<string>> temp = it->second->getList();//get multimap
+			ia = temp.begin();
+			while (ia != temp.end())
+			{
+				double num = it->first / min_frequency;//confidence
+				if (num >= item_frequency && ia->second.find(item) != ia->second.end())//if item exist, item confidence check
+				{
+					if (check == false)
+					{
+						*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << "    " << "Confidence" << endl;
+						cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << "    " << "Confidence" << endl;
+					}
+					*fout << item << " -> ";
+					cout << item << " -> ";
+					printFrequentPatterns(ia->second, item);//print frequentpatterns
+					*fout << fixed;
+					cout << fixed;
+					*fout << " " << it->first << "   "  << setprecision(2) << num << endl;
+					cout << " " << it->first << "   "  << setprecision(2) << num << endl;
+					check = true;//Frequent Pattern exist
+				}
+				ia++;
+			}
+			it++;
+		}
+		pCur = pCur->getNext();// move next datanode
+	}
+	if (check == false)////Frequent Pattern not exist
+		return false;
+	*fout << "================================" << endl << endl;
+	cout << "================================" << endl << endl;
 	return true;
 }
 bool BpTree::printFrequency(string item, int min_frequency)
@@ -223,7 +266,7 @@ bool BpTree::printFrequency(string item, int min_frequency)
 						if (check == false)
 						{
 							*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
-							cout << "StandardItem" << "    " << "FrequentPatternFrequency" << "    " << "Frequency" << endl;
+							cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
 						}
 						*fout << item << " -> ";
 						cout << item << " -> ";
@@ -269,7 +312,7 @@ bool BpTree::printRange(string item, int min, int max)
 						if (check == false)
 						{
 							*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
-							cout << "StandardItem" << "    " << "FrequentPatternFrequency" << "    " << "Frequency" << endl;
+							cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
 						}
 						*fout << item << " -> ";
 						cout << item << " -> ";
@@ -301,7 +344,7 @@ void BpTree::printFrequentPatterns(set<string> pFrequentPattern, string item)
 	{
 		string temp = *it++;
 		if (temp != item)
-		{
+		{//print item
 			*fout << temp;
 			cout << temp;
 		}

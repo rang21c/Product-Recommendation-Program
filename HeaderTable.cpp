@@ -3,10 +3,7 @@
 #include <iostream>
 using namespace std;
 
-HeaderTable::~HeaderTable() 
-{
-
-}
+HeaderTable::~HeaderTable() { }
 
 void HeaderTable::insertTable(char* item, int frequency) 
 {

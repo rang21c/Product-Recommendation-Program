@@ -10,7 +10,10 @@ FPNode::FPNode()	//constructor
 
 FPNode::~FPNode()//destructor
 {
-
+	parent = NULL;
+	next = NULL;
+	delete[] item;
+	frequency = 0;
 }
 
 FPNode* FPNode::getChildrenNode(string item) 
