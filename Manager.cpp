@@ -60,10 +60,26 @@ void Manager::run(const char* command)
 			char* check = strtok(NULL, " ");
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (PRINT_MIN(item, atoi(min_frequency)) && check == NULL)
+			if (check != NULL)
+				printErrorCode(500);
+			else if (PRINT_MIN(item, atoi(min_frequency)))
 				continue;//PRINT_ITEMLIST success
 			else
 				printErrorCode(500);//PRINT_ITEMLIST fail
+		}
+		else if (strcmp(tmp, "PRINT_CONFIDENCE") == 0)
+		{
+			char* item = strtok(NULL, " ");//word cutting
+			char* confidence = strtok(NULL, " ");//word cutting
+			char* check = strtok(NULL, " ");
+			flog << "====== " << tmp << " ======" << endl;
+			cout << "====== " << tmp << " ======" << endl;
+			if (check != NULL)
+				printErrorCode(600);
+			else if (PRINT_CONFIDENCE(item, atof(confidence)))
+				continue;//PRINT_ITEMLIST success
+			else
+				printErrorCode(600);//PRINT_ITEMLIST fail
 		}
 		else if (strcmp(tmp, "PRINT_RANGE") == 0)
 		{
@@ -73,7 +89,9 @@ void Manager::run(const char* command)
 			char* check = strtok(NULL, " ");
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (PRINT_RANGE(item, atoi(min_frequency), atoi(max_frequency)) && check == NULL)
+			if (check != NULL)
+				printErrorCode(700);
+			else if (PRINT_RANGE(item, atoi(min_frequency), atoi(max_frequency)))
 				continue;//PRINT_ITEMLIST success
 			else
 				printErrorCode(700);//PRINT_ITEMLIST fail

@@ -250,15 +250,14 @@ bool BpTree::printRange(string item, int min, int max)
 	bool check = false;
 	BpTreeNode* pCur = root;
 	map<int, FrequentPatternNode*>::iterator it;
-	while (pCur->getMostLeftChild() != NULL)//find mostleft data node
-		pCur = pCur->getMostLeftChild();//pCur is datanode begin()
+	pCur = searchDataNode(min);//find min data node
 	while (pCur != NULL)
 	{
 		map<int, FrequentPatternNode*>* cur = pCur->getDataMap();//get datanode
 		it = cur->begin();//begin iterator
 		while (it != cur->end())
 		{
-			if (min <= it->first && it->first <= max)//find higher than min and lower than max
+			if (it->first <= max)//find higher than min and lower than max
 			{
 				multimap<int, set<string>>::iterator ia;//setting iterator
 				multimap<int, set<string>> temp = it->second->getList();//get multimap
