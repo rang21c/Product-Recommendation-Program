@@ -198,7 +198,7 @@ bool Manager::LOAD()
 bool Manager::BTLOAD()
 {
 	fstream temp;
-	temp.open("result.txt");//read file open
+	temp.open("result2.txt");//read file open
 	if (!temp || bptree->getRoot())//file open fail || bptree is not empty
 		return false;//BTLOAD fail
 	string cmd;

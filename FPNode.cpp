@@ -4,7 +4,7 @@ FPNode::FPNode()	//constructor
 {
 	parent = NULL;
 	next = NULL;
-	item = new char[20]; memset(item, 0, 20);
+	item = new char[40]; memset(item, 0, 40);
 	frequency = 0;
 }
 

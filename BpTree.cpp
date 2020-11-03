@@ -15,7 +15,6 @@ bool BpTree::Insert(int key, set<string> set)
 		return true;
 	}
 	BpTreeNode* pDataNode = searchDataNode(key);//search data node
-
 	map<int, FrequentPatternNode*>* m = pDataNode->getDataMap();
 	if (m->find(key) == m->end())//can not find same data
 	{
@@ -120,56 +119,74 @@ void BpTree::splitDataNode(BpTreeNode* pDataNode)
 
 void BpTree::splitIndexNode(BpTreeNode* pIndexNode) 
 {
-	int split = ceil((order - 1) / 2.0) + 1;//spit index node point
-	BpTreeNode* newindexnode = new BpTreeIndexNode;
-	map <int, BpTreeNode*>::iterator mleft;
-	map <int, BpTreeNode*>::iterator center;
-	map <int, BpTreeNode*>::iterator temp;
-	mleft = pIndexNode->getIndexMap()->begin();
-	for (int i = 1; i <= order; i++)
-	{//find split point indexnode - center
-		if (split < i + 1)
+	int split = ceil((order - 1) / 2.0) + 1;//split index
+
+	map<int, BpTreeNode*>::iterator point = pIndexNode->getIndexMap()->begin();
+	//find split node point
+	for (int i = 1; i < split; i++)
+		point++;
+
+	BpTreeNode* newindexnode = new BpTreeIndexNode;//node to be new indexnode
+	BpTreeNode* tempparentnode = new BpTreeIndexNode;//node to be parent
+
+	//make parent node
+	tempparentnode->insertIndexMap(point->first, point->second);
+	point->second->setParent(tempparentnode);
+
+	point++;//iterator++ because of make new indexnode
+
+	//make new indexnode
+	while (point != pIndexNode->getIndexMap()->end())
+	{
+		newindexnode->insertIndexMap(point->first, point->second);
+		point->second->setParent(newindexnode);
+		point++;
+	}
+	//set parent
+	newindexnode->setMostLeftChild(tempparentnode->getIndexMap()->begin()->second);
+	tempparentnode->getIndexMap()->begin()->second->setParent(newindexnode);
+	tempparentnode->getIndexMap()->begin()->second = newindexnode;
+	newindexnode->setParent(tempparentnode);
+
+	//delete existing node key
+	point = pIndexNode->getIndexMap()->begin();
+	for (int i = 1; i < split; i++)
+		point++;
+	pIndexNode->getIndexMap()->erase(point, pIndexNode->getIndexMap()->end());
+
+
+	if (root == pIndexNode)//if existing node is root
+	{
+		root = tempparentnode;//change root node
+		tempparentnode->setMostLeftChild(pIndexNode);//set Leftchild
+		pIndexNode->setParent(tempparentnode);//set parent
+	}
+	else//if existing node is not root
+	{
+		BpTreeNode* parentnode = pIndexNode->getParent();//real parentnode
+
+		//insert real parentnode
+		parentnode->insertIndexMap(tempparentnode->getIndexMap()->begin()->first, tempparentnode->getIndexMap()->begin()->second);
+		newindexnode->setParent(parentnode);//change parent node
+
+		map<int, BpTreeNode*>::iterator point = parentnode->getIndexMap()->begin();
+
+		//search pIndexNode insert point
+		while (point->first != tempparentnode->getIndexMap()->begin()->first)
+			point++;
+		//insert pIndexNode
+		if (point->first != parentnode->getIndexMap()->begin()->first)
 		{
-			if (split == i)
-			{
-				center = mleft;
-				temp = center;
-			}
-			else
-				newindexnode->insertIndexMap(mleft->first, mleft->second);
+			point--;
+			point->second = pIndexNode;//set child
 		}
-		mleft++;
-	}
-	//set existing
-	newindexnode->setMostLeftChild(center->second);
-	center->second->setParent(newindexnode);
+		else
+		{
+			parentnode->setMostLeftChild(pIndexNode);//set child
+		}
+		pIndexNode->setParent(parentnode);//set parent
 
-	//set parent of children 
-	for (int i = 1; i <= order - split; i++)
-		newindexnode->getIndexMap()->begin()++->second->setParent(newindexnode);
-
-	//delete data to the right of the split point of an existing index node
-	pIndexNode->getIndexMap()->erase(++center, mleft);
-
-	//set center
-	center = temp;
-
-	//indexnode setting
-	if (pIndexNode->getParent() == NULL)
-	{//pIndexNode don't have parent
-		BpTreeNode* newroot = new BpTreeIndexNode;
-		pIndexNode->setParent(newroot);
-		newindexnode->setParent(newroot);
-		newroot->insertIndexMap(center->first, newindexnode);
-		newroot->setMostLeftChild(pIndexNode);
-		pIndexNode->getIndexMap()->erase(center);
-		root = newroot;//set root
-	}
-	else
-	{//pIndexNode have parent
-		newindexnode->setParent(pIndexNode->getParent());
-		pIndexNode->getParent()->insertIndexMap(center->first, newindexnode);
-		pIndexNode->getIndexMap()->erase(center);
+		//split recursive
 		if (excessIndexNode(pIndexNode->getParent()) == true)
 			splitIndexNode(pIndexNode->getParent());
 	}
@@ -217,16 +234,16 @@ bool BpTree::printConfidence(string item, double item_frequency, double min_freq
 				{
 					if (check == false)
 					{
-						*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << "    " << "Confidence" << endl;
-						cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << "    " << "Confidence" << endl;
+						*fout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << " " << "Confidence" << endl;
+						cout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << " " << "Confidence" << endl;
 					}
 					*fout << item << " -> ";
 					cout << item << " -> ";
 					printFrequentPatterns(ia->second, item);//print frequentpatterns
 					*fout << fixed;
 					cout << fixed;
-					*fout << " " << it->first << "   "  << setprecision(2) << num << endl;
-					cout << " " << it->first << "   "  << setprecision(2) << num << endl;
+					*fout << " " << it->first << " "  << setprecision(2) << num << endl;
+					cout << " " << it->first << " "  << setprecision(2) << num << endl;
 					check = true;//Frequent Pattern exist
 				}
 				ia++;
@@ -265,8 +282,8 @@ bool BpTree::printFrequency(string item, int min_frequency)
 					{
 						if (check == false)
 						{
-							*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
-							cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
+							*fout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << endl;
+							cout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << endl;
 						}
 						*fout << item << " -> ";
 						cout << item << " -> ";
@@ -311,8 +328,8 @@ bool BpTree::printRange(string item, int min, int max)
 					{
 						if (check == false)
 						{
-							*fout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
-							cout << "StandardItem" << "    " << "FrequentPattern" << "    " << "Frequency" << endl;
+							*fout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << endl;
+							cout << "StandardItem" << " " << "FrequentPattern" << " " << "Frequency" << endl;
 						}
 						*fout << item << " -> ";
 						cout << item << " -> ";

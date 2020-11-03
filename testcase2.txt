@@ -133,7 +133,7 @@ shrimp	pepper	mineral water	soup	milk	eggs	rice	barbecue sauce	clothes accessori
 mineral water	milk	salmon	green tea	cookies	fresh bread
 spaghetti	mineral water	soup	salmon	pancakes	chicken	mint green tea	low fat yogurt
 burgers	grated cheese	spaghetti	nonfat milk	eggs	gums	chocolate	tomato juice	low fat yogurt
-burgers	chocolate	shrimp	whole wheat pasta	ground beef	soup	energy bar	 asparagus
+burgers	chocolate	shrimp	whole wheat pasta	ground beef	soup	energy bar	asparagus
 mineral water	butter	pancakes	french fries	frozen smoothie	white wine	low fat yogurt
 soup	meatballs	milk	almonds	green tea
 parmesan cheese	mineral water	fromage blanc	eggs	honey	frozen smoothie
