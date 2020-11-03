@@ -119,36 +119,39 @@ void BpTree::splitDataNode(BpTreeNode* pDataNode)
 void BpTree::splitIndexNode(BpTreeNode* pIndexNode) 
 {
 	int split = ceil((order - 1) / 2.0) + 1;//split index
-
 	map<int, BpTreeNode*>::iterator point = pIndexNode->getIndexMap()->begin();
+	
 	//find split node point
 	for (int i = 1; i < split; i++)
 		point++;
 
-	BpTreeNode* newindexnode = new BpTreeIndexNode;//node to be new indexnode
+	//make parent node	
 	BpTreeNode* tempparentnode = new BpTreeIndexNode;//node to be parent
-
-	//make parent node
 	tempparentnode->insertIndexMap(point->first, point->second);
 	point->second->setParent(tempparentnode);
 
-	point++;//iterator++ because of make new indexnode
-
 	//make new indexnode
-	while (point != pIndexNode->getIndexMap()->end())
+	BpTreeNode* newindexnode = new BpTreeIndexNode;//node to be new indexnode
+	point++;//iterator++ because of make new indexnode
+	while (1)
 	{
 		newindexnode->insertIndexMap(point->first, point->second);
 		point->second->setParent(newindexnode);
 		point++;
+		if (point == pIndexNode->getIndexMap()->end())
+		{
+			point = pIndexNode->getIndexMap()->begin();
+			break;
+		}
 	}
+
 	//set parent
 	newindexnode->setMostLeftChild(tempparentnode->getIndexMap()->begin()->second);
+	newindexnode->setParent(tempparentnode);
 	tempparentnode->getIndexMap()->begin()->second->setParent(newindexnode);
 	tempparentnode->getIndexMap()->begin()->second = newindexnode;
-	newindexnode->setParent(tempparentnode);
 
 	//delete existing node key
-	point = pIndexNode->getIndexMap()->begin();
 	for (int i = 1; i < split; i++)
 		point++;
 	pIndexNode->getIndexMap()->erase(point, pIndexNode->getIndexMap()->end());
@@ -157,8 +160,8 @@ void BpTree::splitIndexNode(BpTreeNode* pIndexNode)
 	if (root == pIndexNode)//if existing node is root
 	{
 		root = tempparentnode;//change root node
-		tempparentnode->setMostLeftChild(pIndexNode);//set Leftchild
 		pIndexNode->setParent(tempparentnode);//set parent
+		tempparentnode->setMostLeftChild(pIndexNode);//set Leftchild
 	}
 	else//if existing node is not root
 	{
@@ -166,28 +169,28 @@ void BpTree::splitIndexNode(BpTreeNode* pIndexNode)
 
 		//insert real parentnode
 		parentnode->insertIndexMap(tempparentnode->getIndexMap()->begin()->first, tempparentnode->getIndexMap()->begin()->second);
+		map<int, BpTreeNode*>::iterator point = parentnode->getIndexMap()->begin();
 		newindexnode->setParent(parentnode);//change parent node
 
-		map<int, BpTreeNode*>::iterator point = parentnode->getIndexMap()->begin();
-
 		//search pIndexNode insert point
-		while (point->first != tempparentnode->getIndexMap()->begin()->first)
+		for (auto i = point; i->first != tempparentnode->getIndexMap()->begin()->first; i++)
 			point++;
-		//insert pIndexNode
+
+		//set pIndexNode point
 		if (point->first != parentnode->getIndexMap()->begin()->first)
 		{
 			point--;
 			point->second = pIndexNode;//set child
 		}
-		else
+		else//if point->first == parentnode->getIndexMap()->begin()->first
 		{
 			parentnode->setMostLeftChild(pIndexNode);//set child
 		}
-		pIndexNode->setParent(parentnode);//set parent
 
 		//split recursive
-		if (excessIndexNode(pIndexNode->getParent()) == true)
-			splitIndexNode(pIndexNode->getParent());
+		pIndexNode->setParent(parentnode);//set parent
+		if (excessIndexNode(parentnode) == true)
+			splitIndexNode(parentnode);
 	}
 }
 
