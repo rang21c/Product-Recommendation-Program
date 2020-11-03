@@ -7,110 +7,109 @@ bool BpTree::Insert(int key, set<string> set)
 	FrequentPatternNode* newnode = new FrequentPatternNode;
 	newnode->setFrequency(set.size());
 	newnode->InsertList(set);
+	BpTreeNode* insertdatanode;
+	map<int, FrequentPatternNode*>* datamap;
 	if (root == NULL)//First insert
 	{
-		BpTreeNode* pDataNode = new BpTreeDataNode;
-		pDataNode->insertDataMap(key, newnode);
-		root = pDataNode;
+		BpTreeNode* newdatanode = new BpTreeDataNode;
+		newdatanode->insertDataMap(key, newnode);
+		root = newdatanode;//set root
 		return true;
 	}
-	BpTreeNode* pDataNode = searchDataNode(key);//search data node
-	map<int, FrequentPatternNode*>* m = pDataNode->getDataMap();
-	if (m->find(key) == m->end())//can not find same data
+	else//if root is not NULL // find insert point
 	{
-		pDataNode->insertDataMap(key, newnode);
-		if (excessDataNode(pDataNode) == true)
-			splitDataNode(pDataNode);//splitdatanode
+		insertdatanode = searchDataNode(key);//search data node
+		datamap = insertdatanode->getDataMap();
+	}
+	if (datamap->find(key) == datamap->end())//can not find same data
+	{
+		insertdatanode->insertDataMap(key, newnode);
+		if (excessDataNode(insertdatanode) == true)
+			splitDataNode(insertdatanode);//splitdatanode
 	}
 	else//find same data
-	{
-		m->find(key)->second->InsertList(set);
-	}
+		datamap->find(key)->second->InsertList(set);
 	return true;//insert success
 }
 
 BpTreeNode* BpTree::searchDataNode(int n) 
 {
 	BpTreeNode* pCur = root;
-	map<int, BpTreeNode*>::iterator it;
-
+	map<int, BpTreeNode*>::iterator point;
 	while (pCur->getMostLeftChild() != NULL)
 	{//search
-		it = pCur->getIndexMap()->begin();
-		if (n < it->first)//if searchnode smaller
-			pCur = pCur->getMostLeftChild();//move leftchild
-		else
-		{//if searchnode bigger 
+		point = pCur->getIndexMap()->begin();
+		if (point->first <= n)
+		{//if n is bigger than point or same // so point++ and find continue
 			while (1)
 			{
-				it++;
-				if (it == pCur->getIndexMap()->end() || n < it->first)
-				{
-					it--;
-					pCur = it->second;//move child
+				point++;
+				if (point == pCur->getIndexMap()->end() || n < point->first)
+				{//if iterator visit end or find point 
+					point--;
+					pCur = point->second;//move child
 					break;
 				}
 			}
 		}
+		else//if n is smaller than point
+			pCur = pCur->getMostLeftChild();//move leftchild
 	}
-	return pCur;
+	return pCur;//return find node
 }
 
 void BpTree::splitDataNode(BpTreeNode* pDataNode) 
 {
 	int split = ceil((order - 1) / 2.0) + 1;//spit data node index
 	int count = 0;
-	map<int, FrequentPatternNode*>::iterator mleft;
-	map<int, FrequentPatternNode*>::iterator center;
+	BpTreeNode* rightdatanode = new BpTreeDataNode;//right datanode of a division node
+	map<int, FrequentPatternNode*>::iterator center;//centernode iterator
 	map<int, FrequentPatternNode*>::iterator temp;
-	mleft = pDataNode->getDataMap()->begin();
+	center = pDataNode->getDataMap()->begin();
 
 	for (int i = 1; i < order; i++)
 	{//find split point datanode - center
-		mleft++;
+		center++;
 		if (i == split - 1)//find split node
 		{
-			center = mleft;//set centernode index
 			temp = center;//store centernode index
+			break;
 		}
 	}
-	BpTreeNode* newdatanode = new BpTreeDataNode;//right datanode of a division node
 	while (1)
-	{//make a right datanode of a division node
-		newdatanode->insertDataMap(center->first, center->second);
+	{//make a right datanode
+		rightdatanode->insertDataMap(center->first, center->second);
 		count++;//count right datanode
 		if (count > (order - split))
 		{
 			center = temp;//set center node
+			//delete data to the right of the split point of an existing data node
+			pDataNode->getDataMap()->erase(center, pDataNode->getDataMap()->end());
 			break;
 		}
 		center++;
 	}
-
-	//delete data to the right of the split point of an existing data node
-	pDataNode->getDataMap()->erase(center, pDataNode->getDataMap()->end());
-
 	//set next and prev
-	newdatanode->setNext(pDataNode->getNext());
 	if (pDataNode->getNext() != NULL)
-		pDataNode->getNext()->setPrev(newdatanode);
-	pDataNode->setNext(newdatanode);
-	newdatanode->setPrev(pDataNode);
+		pDataNode->getNext()->setPrev(rightdatanode);
+	rightdatanode->setNext(pDataNode->getNext());
+	rightdatanode->setPrev(pDataNode);
+	pDataNode->setNext(rightdatanode);
 
 	//indexnode setting
 	if (pDataNode->getParent() == NULL)
 	{//first index node insert
 		BpTreeNode* indexParentnode = new BpTreeIndexNode;
-		indexParentnode->insertIndexMap(newdatanode->getDataMap()->begin()->first, newdatanode);
-		pDataNode->setParent(indexParentnode);
-		newdatanode->setParent(indexParentnode);
-		indexParentnode->setMostLeftChild(pDataNode);
+		indexParentnode->insertIndexMap(rightdatanode->getDataMap()->begin()->first, rightdatanode);
 		root = indexParentnode;//set root
+		pDataNode->setParent(indexParentnode);
+		rightdatanode->setParent(indexParentnode);
+		indexParentnode->setMostLeftChild(pDataNode);
 	}
 	else
 	{//If not the first insertion of index node
-		pDataNode->getParent()->insertIndexMap(newdatanode->getDataMap()->begin()->first, newdatanode);
-		newdatanode->setParent(pDataNode->getParent());
+		pDataNode->getParent()->insertIndexMap(rightdatanode->getDataMap()->begin()->first, rightdatanode);
+		rightdatanode->setParent(pDataNode->getParent());
 		if (excessIndexNode(pDataNode->getParent()) == true)
 			splitIndexNode(pDataNode->getParent());
 	}
