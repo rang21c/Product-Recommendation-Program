@@ -5,8 +5,8 @@
 class HeaderTable
 {
 private:
-	list<pair<int, string>> indexTable;//상품 빈도수, 상품명
-	map<string, FPNode*> dataTable;//상품명, 하위 상품 노드
+	list<pair<int, string>> indexTable;//Frequency, item
+	map<string, FPNode*> dataTable;//item, node
 public:
 	HeaderTable() { }
 	~HeaderTable();

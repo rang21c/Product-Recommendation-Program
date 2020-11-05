@@ -11,7 +11,7 @@ private:
 	int frequency;
 	FPNode* parent;//parent node
 	FPNode* next;
-	map<string, FPNode*> children;//상품명, 하위상품노드
+	map<string, FPNode*> children;//item, node
 public:
 	FPNode();
 	~FPNode();

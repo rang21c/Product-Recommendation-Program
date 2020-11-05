@@ -6,8 +6,8 @@ class BpTreeDataNode : public BpTreeNode
 {
 private:
 	map <int, FrequentPatternNode*> mapData;
-	BpTreeNode* pNext;
-	BpTreeNode* pPrev;
+	BpTreeNode* pNext;//next pointer
+	BpTreeNode* pPrev;//prev pointer
 public:
 	BpTreeDataNode() {
 		pNext = NULL;

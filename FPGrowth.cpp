@@ -17,7 +17,7 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 			if (curNode->getChildrenNode((*i)))//item exist
 			{
 				curNode->getChildrenNode((*i))->updateFrequency(1);//frequency++
-				curNode = curNode->getChildrenNode((*i));
+				curNode = curNode->getChildrenNode((*i));//move childrennode
 			}
 			else//item no exist
 			{
@@ -46,35 +46,35 @@ void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node)
 		{
 			if (temp->getNext() == NULL)
 				break;
-			temp = temp->getNext();
+			temp = temp->getNext();//move next
 		}
-		temp->setNext(node);
+		temp->setNext(node);//set next behind tempnode
 	}
 }
 
-//bool FPGrowth::contains_single_path(FPNode* pNode) 
-//{
-//	if (pNode->getChildren().size() == 0) return true;
-//	else if (pNode->getChildren().size() > 1) return false;
-//	return contains_single_path(pNode->getChildren().begin()->second);
-//}
-//
-//map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* pTable, FPNode* pTree) {
-//
-//	return {};
-//}
+bool FPGrowth::contains_single_path(FPNode* pNode) 
+{
+	if (pNode->getChildren().size() == 0) return true;
+	else if (pNode->getChildren().size() > 1) return false;
+	return contains_single_path(pNode->getChildren().begin()->second);
+}
 
-//void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* ptr, int depth) {
-//	if (data.size() == depth) {
-//		set<string> set; set.insert(item);
-//		for (int i = 0; i < data.size(); i++) { if (ptr[i] == 1) set.insert(data[i]); }
-//		FrequentPattern->insert(make_pair(set, frequency)); return;
-//	}
-//	ptr[depth] = 1;
-//	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
-//	ptr[depth] = 0;
-//	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
-//}
+map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* pTable, FPNode* pTree) {
+
+	return {};
+}
+
+void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* ptr, int depth) {
+	if (data.size() == depth) {
+		set<string> set; set.insert(item);
+		for (int i = 0; i < data.size(); i++) { if (ptr[i] == 1) set.insert(data[i]); }
+		FrequentPattern->insert(make_pair(set, frequency)); return;
+	}
+	ptr[depth] = 1;
+	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
+	ptr[depth] = 0;
+	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
+}
 
 bool FPGrowth::printList() 
 {//PRINT_ITEMLIST
@@ -84,7 +84,7 @@ bool FPGrowth::printList()
 	*fout << "Item	Frequency" << endl;
 	cout << "Item	Frequency" << endl;
 	for (auto it = temp.begin(); it != temp.end(); it++)
-	{
+	{//print Item, Frequency
 		*fout << (*it).second << " " << (*it).first << endl;
 		cout << (*it).second << " " << (*it).first << endl;
 	}
@@ -129,7 +129,7 @@ bool FPGrowth::printTree()
 	return true;
 }
 
-//void FPGrowth::saveFrequentPatterns()
-//{
-//
-//}
+void FPGrowth::saveFrequentPatterns()
+{
+
+}

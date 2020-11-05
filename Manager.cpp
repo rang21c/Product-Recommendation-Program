@@ -19,7 +19,7 @@ void Manager::run(const char* command)
 		if (tmp == NULL) break;
 		if (strcmp(tmp, "LOAD") == 0)
 		{
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "========== " << tmp << " ==========" << endl;
 			cout << "========== " << tmp << " ==========" << endl;
 			if (check != NULL)
@@ -31,7 +31,7 @@ void Manager::run(const char* command)
 		}
 		else if (strcmp(tmp, "BTLOAD") == 0)
 		{
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "========== " << tmp << " ==========" << endl;
 			cout << "========== " << tmp << " ==========" << endl;
 			if (check != NULL)
@@ -43,7 +43,7 @@ void Manager::run(const char* command)
 		}
 		else if (strcmp(tmp, "PRINT_ITEMLIST") == 0)
 		{
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
 			if (check != NULL)
@@ -55,7 +55,7 @@ void Manager::run(const char* command)
 		}
 		else if (strcmp(tmp, "PRINT_FPTREE") == 0)
 		{
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
 			if (check != NULL)
@@ -69,10 +69,10 @@ void Manager::run(const char* command)
 		{
 			char* item = strtok(NULL, " ");//word cutting
 			char* min_frequency = strtok(NULL, " ");//word cutting
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (check != NULL)
+			if (item == NULL || min_frequency == NULL || check != NULL || bptree->getRoot() == NULL)
 				printErrorCode(500);
 			else if (PRINT_MIN(item, atoi(min_frequency)))
 				continue;//PRINT_MIN success
@@ -83,10 +83,10 @@ void Manager::run(const char* command)
 		{
 			char* item = strtok(NULL, " ");//word cutting
 			char* confidence = strtok(NULL, " ");//word cutting
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (check != NULL)
+			if (item == NULL || confidence == NULL || check != NULL || bptree->getRoot() == NULL)
 				printErrorCode(600);
 			else if (PRINT_CONFIDENCE(item, atof(confidence)))
 				continue;//PRINT_CONFIDENCE success
@@ -98,10 +98,10 @@ void Manager::run(const char* command)
 			char* item = strtok(NULL, " ");//word cutting
 			char* min_frequency = strtok(NULL, " ");//word cutting
 			char* max_frequency = strtok(NULL, " ");//word cutting
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "====== " << tmp << " ======" << endl;
 			cout << "====== " << tmp << " ======" << endl;
-			if (check != NULL)
+			if (item == NULL || min_frequency == NULL || max_frequency == NULL || check != NULL || bptree->getRoot() == NULL)
 				printErrorCode(700);
 			else if (PRINT_RANGE(item, atoi(min_frequency), atoi(max_frequency)))
 				continue;//PRINT_RANGE success
@@ -110,7 +110,7 @@ void Manager::run(const char* command)
 		}
 		else if (strcmp(tmp, "SAVE") == 0)
 		{
-			char* check = strtok(NULL, " ");
+			char* check = strtok(NULL, " ");//over parameter
 			flog << "========== " << tmp << " ==========" << endl;
 			cout << "========== " << tmp << " ==========" << endl;
 			if (check != NULL)
@@ -137,7 +137,7 @@ bool Manager::LOAD()
 	FPNode* root = this->fpgrowth->getTree();
 	fstream temp;
 	temp.open("market.txt");//read file open
-	if (!temp || !fpgrowth->getHeaderTable()->getdataTable().empty() || fpgrowth->getTree()->getNext())//file open fail || already inserted
+	if (!temp || !fpgrowth->getHeaderTable()->getdataTable().empty())//file open fail || already inserted
 		return false;//LOAD fail
 	string cmd;
 	vector<list<string>> item_vector;//vector of item_array
@@ -179,7 +179,7 @@ bool Manager::LOAD()
 			for (auto k = item_vector[i].begin(); k != item_vector[i].end(); k++)
 			{
 				if (strcmp((*j).c_str(), (*k).c_str()) > 0 && fpgrowth->item_frequency((*k)) == fpgrowth->item_frequency((*j)))
-				{//item_array selection sort by frequency if same frequency
+				{//item_array selection sort by name if same frequency
 					string temp = (*j);
 					(*j) = (*k);
 					(*k) = temp;
@@ -198,7 +198,7 @@ bool Manager::LOAD()
 bool Manager::BTLOAD()
 {
 	fstream temp;
-	temp.open("result2.txt");//read file open
+	temp.open("result.txt");//read file open
 	if (!temp || bptree->getRoot())//file open fail || bptree is not empty
 		return false;//BTLOAD fail
 	string cmd;
@@ -238,21 +238,21 @@ bool Manager::PRINT_FPTREE()
 bool Manager::PRINT_MIN(char* item, int min_frequency) 
 {
 	if (!bptree->printFrequency(item, min_frequency) || bptree->getRoot() == NULL)
-		return false;
+		return false;//Frequent Pattern not exist || bptree is empty
 	return true;
 }
 
 bool Manager::PRINT_CONFIDENCE(char* item, double rate) 
 {
 	if (!bptree->printConfidence(item, rate, fpgrowth->item_frequency(item)) || bptree->getRoot() == NULL)
-		return false;
+		return false;//Frequent Pattern not exist || bptree is empty
 	return true;
 }
 
 bool Manager::PRINT_RANGE(char* item, int start, int end) 
 {
 	if (!bptree->printRange(item, start, end) || bptree->getRoot() == NULL)
-		return false;
+		return false;//Frequent Pattern not exist || bptree is empty
 	return true;
 }
 
