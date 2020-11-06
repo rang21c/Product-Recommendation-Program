@@ -218,6 +218,7 @@ bool Manager::BTLOAD()
 		}
 		bptree->Insert(atoi(frequency), fp);//insert bptree
 	}
+	temp.close();
 	return true;
 }
 

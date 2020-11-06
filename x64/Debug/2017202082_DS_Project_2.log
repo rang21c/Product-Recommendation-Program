@@ -1,7 +1,4 @@
-﻿  BpTree.cpp
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\BpTree.cpp(8,34): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\BpTree.cpp(61,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\BpTree.cpp(115,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Manager.cpp
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\utility(152,1): warning C4267: '초기화 중': 'size_t'에서 '_Ty1'(으)로 변환하면서 데이터가 손실될 수 있습니다.
           with
           [
@@ -19,41 +16,4 @@ C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\
               _Other1=unsigned __int64,
               _Other2=std::set<std::string,std::less<std::string>,std::allocator<std::string>> &
           ]
-  Manager.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\utility(152,1): warning C4267: '초기화 중': 'size_t'에서 '_Ty1'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-          with
-          [
-              _Ty1=const int
-          ]
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\FrequentPatternNode.h(17): message : 컴파일되는 함수 템플릿 인스턴스화 'std::pair<const int,std::set<std::string,std::less<std::string>,std::allocator<std::string>>>::pair<unsigned __int64,std::set<std::string,std::less<std::string>,std::allocator<std::string>>&,0>(_Other1 &&,_Other2) noexcept(false)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Other1=unsigned __int64,
-              _Other2=std::set<std::string,std::less<std::string>,std::allocator<std::string>> &
-          ]
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\FrequentPatternNode.h(17): message : 컴파일되는 함수 템플릿 인스턴스화 'std::pair<const int,std::set<std::string,std::less<std::string>,std::allocator<std::string>>>::pair<unsigned __int64,std::set<std::string,std::less<std::string>,std::allocator<std::string>>&,0>(_Other1 &&,_Other2) noexcept(false)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Other1=unsigned __int64,
-              _Other2=std::set<std::string,std::less<std::string>,std::allocator<std::string>> &
-          ]
-  main.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\utility(152,1): warning C4267: '초기화 중': 'size_t'에서 '_Ty1'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-          with
-          [
-              _Ty1=const int
-          ]
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\FrequentPatternNode.h(17): message : 컴파일되는 함수 템플릿 인스턴스화 'std::pair<const int,std::set<std::string,std::less<std::string>,std::allocator<std::string>>>::pair<unsigned __int64,std::set<std::string,std::less<std::string>,std::allocator<std::string>>&,0>(_Other1 &&,_Other2) noexcept(false)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Other1=unsigned __int64,
-              _Other2=std::set<std::string,std::less<std::string>,std::allocator<std::string>> &
-          ]
-C:\Users\류화랑\source\repos\2017202082_DS_Project_2\2017202082_DS_Project_2\FrequentPatternNode.h(17): message : 컴파일되는 함수 템플릿 인스턴스화 'std::pair<const int,std::set<std::string,std::less<std::string>,std::allocator<std::string>>>::pair<unsigned __int64,std::set<std::string,std::less<std::string>,std::allocator<std::string>>&,0>(_Other1 &&,_Other2) noexcept(false)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Other1=unsigned __int64,
-              _Other2=std::set<std::string,std::less<std::string>,std::allocator<std::string>> &
-          ]
-  코드를 생성하고 있습니다...
   2017202082_DS_Project_2.vcxproj -> C:\Users\류화랑\source\repos\2017202082_DS_Project_2\x64\Debug\2017202082_DS_Project_2.exe
